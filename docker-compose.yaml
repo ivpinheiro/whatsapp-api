@@ -1,0 +1,21 @@
+services:
+  nginx:
+    build:
+      context: ./nginx/prod
+      dockerfile: Dockerfile
+    ports:
+      - "80:80"
+    volumes:
+      - ./nginx/prod/config/nginx:/etc/nginx
+      - ./nginx/prod/share:/usr/share/nginx/html
+    restart: always
+
+  whatsapp-api:
+    container_name: whatsapp_web_api
+    image: chrishubert/whatsapp-web-api:latest
+    restart: always
+    env_file: .env
+    volumes:
+      - ./whatsapp-api/sessions:/usr/src/app/sessions
+    depends_on:
+      - nginx
